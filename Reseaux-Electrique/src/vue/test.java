@@ -31,7 +31,7 @@ public class test {
 		//rxe.ajoutConnexion(m3, g1);
 		
 		try {
-			rxe = ParserFile.parser("reseau.txt");
+			rxe = ParserFile.parser("./src/fichierTest/instance2.txt");
 			CoutRxElct c = new CoutRxElct(rxe);
 			double cout = c.calculeCoutRxE();
 			System.out.printf("  -> Le cout total du reseau est : %.3f\n", cout);

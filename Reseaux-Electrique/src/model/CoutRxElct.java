@@ -169,4 +169,8 @@ public class CoutRxElct {
 
 		System.out.println("  -> Modification terminée.");
 	}
+	
+	public void afficherrxe() {
+		System.out.println(rxe.afficherConnexion());
+	}
 }

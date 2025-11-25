@@ -23,7 +23,7 @@ public class Optimiseur {
 
         double coutActuel = calculateur.calculeCoutRxE();
         System.out.println("  -> [Auto] Coût initial : " + String.format("%.3f", coutActuel));
-
+        calculateur.afficherrxe();
         double meilleurCoutConnu = coutActuel;
         int iteration = 0;
 
@@ -69,6 +69,7 @@ public class Optimiseur {
 
         System.out.println("  -> Optimisation terminée (" + iteration + " itérations).");
         System.out.println("  -> [Auto] Coût final : " + String.format("%.2f", coutActuel));
+        calculateur.afficherrxe();
     }
 
     private static void effectuerDeplacement(Connexion c, Generateur source, Generateur dest, int conso) {
