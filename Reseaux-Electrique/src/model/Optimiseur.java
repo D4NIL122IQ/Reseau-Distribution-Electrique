@@ -10,8 +10,8 @@ public class Optimiseur {
      * @param rxe Le réseau
      * @param lambda La sévérité de la pénalisation
      */
-    public static void resolutionAutomatique(ReseauElectrique rxe, double lambda) {
-        if (rxe.getConnexions().isEmpty() || rxe.getGens().isEmpty()) return;
+    public static CoutRxElct resolutionAutomatique(ReseauElectrique rxe, double lambda) {
+        if (rxe.getConnexions().isEmpty() || rxe.getGens().isEmpty()) return null;
 
         CoutRxElct calculateur = new CoutRxElct(rxe);
         calculateur.setSeverite(lambda); // IMPORTANT : On configure lambda
@@ -70,6 +70,8 @@ public class Optimiseur {
         System.out.println("  -> Optimisation terminée (" + iteration + " itérations).");
         System.out.println("  -> [Auto] Coût final : " + String.format("%.2f", coutActuel));
         calculateur.afficherrxe();
+        
+        return calculateur;
     }
 
     private static void effectuerDeplacement(Connexion c, Generateur source, Generateur dest, int conso) {

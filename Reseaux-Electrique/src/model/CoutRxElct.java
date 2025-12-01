@@ -14,6 +14,8 @@ public class CoutRxElct {
     public CoutRxElct(ReseauElectrique rxe) {
         this.rxe = rxe;
     }
+    
+    
 
     // --- Setter pour Lambda (Sévérité) ---
     public void setSeverite(double s) {
@@ -57,7 +59,8 @@ public class CoutRxElct {
 
     public double getDisp() { return lastDisp; }
     public double getSurcharge() { return lastSurcharge; }
-
+    public ReseauElectrique getRxe() { return rxe;}
+    
     public double calculeCoutRxE() {
         if (rxe.getGens().isEmpty()) return 0;
         // Utilise la variable severitePenalisation configurée

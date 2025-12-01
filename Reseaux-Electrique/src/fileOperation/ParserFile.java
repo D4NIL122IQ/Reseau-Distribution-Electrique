@@ -1,6 +1,7 @@
 package fileOperation;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,13 +16,13 @@ import model.ReseauElectrique;
 public class ParserFile {
 
     // On laisse remonter TOUTES les exceptions vers le Main
-    public static ReseauElectrique parser(String filepath) throws Exception {
+    public static ReseauElectrique parser(String f) throws Exception {
         ReseauElectrique rxe = new ReseauElectrique(); // On instancie le réseau vide au début
 
         int numLigne = 0; // COMPTEUR DE LIGNE (Demandé par le PDF)
         int etape = 0; // 0=Gen, 1=Maison, 2=Connexion
 
-        try (BufferedReader bReader = new BufferedReader(new FileReader(filepath))) {
+        try (BufferedReader bReader = new BufferedReader(new FileReader(f))) {
             String ligne;
 
             while ((ligne = bReader.readLine()) != null) {
