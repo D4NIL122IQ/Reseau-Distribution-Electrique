@@ -92,8 +92,9 @@ public class DisplayView {
                 }
             });
             
-            // Assemblage du bas
-            buttonBar.getChildren().addAll(optimizeBtn, exportBtn);
+            Button rtrnLobby = new Button("Choisir un autre fichier");
+            rtrnLobby.setOnAction(e  -> app.showImportView());            // Assemblage du bas
+            buttonBar.getChildren().addAll(rtrnLobby,optimizeBtn, exportBtn);
             bottomContainer.getChildren().addAll(statusLabel, buttonBar); // On empile Label puis Boutons
 
             // Premier dessin
@@ -120,7 +121,7 @@ public class DisplayView {
 
         // --- Dessin des Maisons ---
         for (Maison m : rxe.getMaisons()) {
-            VBox box = createNode("/assets/maison.png", m.getNomM());
+            VBox box = createNode("/assets/maison.png", m.getNomM() + "\nConso "+ m.getConso().getConso() + "Kwh");
             box.setLayoutX(MARGE_X + (indexMaison * ESPACE_X));
             box.setLayoutY(Y_MAISON);
             nodeMaison.put(m, box);
@@ -130,7 +131,7 @@ public class DisplayView {
 
         // --- Dessin des Générateurs ---
         for (Generateur g : rxe.getGens()) {
-            VBox box = createNode("/assets/generateur-electrique.png", g.getNomG());
+            VBox box = createNode("/assets/generateur-electrique.png", g.getNomG() + "\nCapa "+ g.getCapaciteMax() + "\n Charge " + g.getChargeActu());
             box.setLayoutX(MARGE_X + (indexGen * ESPACE_X));
             box.setLayoutY(Y_GEN);
             nodeGen.put(g, box);
