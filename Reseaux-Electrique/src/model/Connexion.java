@@ -2,6 +2,14 @@ package model;
 
 import java.util.ArrayList;
 
+/*
+ * Classe pour representer une connexion entre un generateur et une maison 
+ * 
+ * @param m : maison 
+ * @param g : generateur
+ * 
+ * @author Danil Guidjou
+ */
 public class Connexion {
 	private Maison m;
 	private Generateur g;
@@ -19,9 +27,9 @@ public class Connexion {
 		return m;
 	}
 
-    public void setGen(Generateur g) {
-        this.g = g;
-    }
+	public void setGen(Generateur g) {
+		this.g = g;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -36,12 +44,13 @@ public class Connexion {
 			return false;
 		}
 	}
-	
+
 	/*
 	 * Verifier si une liste de connexion contient une maison (nomM)
-	 *  
+	 * 
 	 * @param nomM nom d'une maison
-	 * @param connexion liste de connexion 
+	 * 
+	 * @param connexion liste de connexion
 	 */
 	public static boolean contientMaison(String nomM, ArrayList<Connexion> connexion) {
 		for (Connexion c : connexion) {

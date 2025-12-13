@@ -3,69 +3,84 @@ package model;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/*
+ * Classe qui contient tout les methodes pour calculer le cout du reseau
+ * 
+ * @param rxe : une instance de ReseauElect
+ * 
+ * @author Danil Guidjou
+ */
 public class CoutRxElct {
-    private ReseauElectrique rxe;
-    private double lastDisp = 0;
-    private double lastSurcharge = 0;
+	private ReseauElectrique rxe;
+	private double lastDisp = 0;
+	private double lastSurcharge = 0;
 
-    // Par défaut 10, mais modifiable via ligne de commande
-    private double severitePenalisation = 10.0;
+	// Par défaut 10, mais modifiable via ligne de commande
+	private double severitePenalisation = 10.0;
 
-    public CoutRxElct(ReseauElectrique rxe) {
-        this.rxe = rxe;
-    }
-    
-    
+	public CoutRxElct(ReseauElectrique rxe) {
+		this.rxe = rxe;
+	}
 
-    // --- Setter pour Lambda (Sévérité) ---
-    public void setSeverite(double s) {
-        this.severitePenalisation = s;
-    }
+	public void setSeverite(double s) {
+		this.severitePenalisation = s;
+	}
 
-    private double moyenneGen() {
-        ArrayList<Generateur> gen = rxe.getGens();
-        if (gen.isEmpty()) return 0;
-        double somme = 0;
-        for (Generateur g : gen) {
-            somme += (double)g.getChargeActu()/g.getCapaciteMax() ;
-        }
-        return (double) somme / gen.size();
-    }
+	private double moyenneGen() {
+		ArrayList<Generateur> gen = rxe.getGens();
+		if (gen.isEmpty())
+			return 0;
+		double somme = 0;
+		for (Generateur g : gen) {
+			somme += (double) g.getChargeActu() / g.getCapaciteMax();
+		}
+		return (double) somme / gen.size();
+	}
 
-    private double disp() {
-        ArrayList<Generateur> gen = rxe.getGens();
-        double somme = 0;
-        double Um = moyenneGen();
-        for (Generateur g : gen) {
-            somme += Math.abs((double)g.getChargeActu()/g.getCapaciteMax() - Um);
-        }
-        this.lastDisp = somme;
-        return somme;
-    }
+	private double disp() {
+		ArrayList<Generateur> gen = rxe.getGens();
+		double somme = 0;
+		double Um = moyenneGen();
+		for (Generateur g : gen) {
+			somme += Math.abs((double) g.getChargeActu() / g.getCapaciteMax() - Um);
+		}
+		this.lastDisp = somme;
+		return somme;
+	}
 
-    private double surcharge() {
-        double somme = 0;
-        ArrayList<Generateur> gen = rxe.getGens();
-        for (Generateur g : gen) {
-            if (g.getCapaciteMax() > 0) {
-                somme += Math.max(0, ((double) g.getChargeActu() - g.getCapaciteMax()) / g.getCapaciteMax());
-            } else if (g.getChargeActu() > 0) {
-                somme += Double.POSITIVE_INFINITY;
-            }
-        }
-        this.lastSurcharge = somme;
-        return somme;
-    }
+	private double surcharge() {
+		double somme = 0;
+		ArrayList<Generateur> gen = rxe.getGens();
+		for (Generateur g : gen) {
+			if (g.getCapaciteMax() > 0) {
+				somme += Math.max(0, ((double) g.getChargeActu() - g.getCapaciteMax()) / g.getCapaciteMax());
+			} else if (g.getChargeActu() > 0) {
+				somme += Double.POSITIVE_INFINITY;
+			}
+		}
+		this.lastSurcharge = somme;
+		return somme;
+	}
 
-    public double getDisp() { return lastDisp; }
-    public double getSurcharge() { return lastSurcharge; }
-    public ReseauElectrique getRxe() { return rxe;}
-    
-    public double calculeCoutRxE() {
-        if (rxe.getGens().isEmpty()) return 0;
-        // Utilise la variable severitePenalisation configurée
-        return disp() + severitePenalisation * surcharge();
-    }
+	public double getDisp() {
+		return lastDisp;
+	}
+
+	public double getSurcharge() {
+		return lastSurcharge;
+	}
+
+	public ReseauElectrique getRxe() {
+		return rxe;
+	}
+
+	public double calculeCoutRxE() {
+		if (rxe.getGens().isEmpty())
+			return 0;
+		// Utilise la variable severitePenalisation configurée
+		return disp() + severitePenalisation * surcharge();
+	}
+
 	/**
 	 * MODIFIÉ POUR CORRESPONDRE AUX EXIGENCES Demande l'ancienne connexion (M1 G1)
 	 * puis la nouvelle (M1 G2)
@@ -172,7 +187,7 @@ public class CoutRxElct {
 
 		System.out.println("  -> Modification terminée.");
 	}
-	
+
 	public void afficherrxe() {
 		System.out.println(rxe.afficherConnexion());
 	}

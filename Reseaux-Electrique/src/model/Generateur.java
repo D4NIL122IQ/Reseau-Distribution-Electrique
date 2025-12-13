@@ -1,6 +1,10 @@
 package model;
 
-
+/*
+ * Classe qui caracterise un generateur
+ * 
+ * @author Danil Guidjou
+ */
 public class Generateur {
 	private String nomG;
 	private int capaciteMax;

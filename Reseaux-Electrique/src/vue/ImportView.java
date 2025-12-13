@@ -12,6 +12,11 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 
+/*
+ * Vue pour importer || drag&drop un fihcier
+ * 
+ * @author Danil Guidjou
+ */
 public class ImportView {
 
     private VBox root = new VBox(20);
@@ -21,8 +26,8 @@ public class ImportView {
 
     public ImportView(MainApp app) {
         this.app = app;
-
-        // --- LABEL + ICÔNE ---
+        
+        // setup icon fichier
         ImageView fileIcon = new ImageView();
         fileIcon.setFitWidth(40);
         fileIcon.setFitHeight(40);
@@ -32,7 +37,7 @@ public class ImportView {
         HBox fileInfo = new HBox(10, fileIcon, fileLabel);
         fileInfo.setAlignment(Pos.CENTER);
 
-        // --- ZONE DE DRAG & DROP ---
+        // zone drag & drop
         Label dragLabel = new Label("Déposez un fichier .txt ici");
         dragLabel.setStyle("-fx-font-size: 16; -fx-text-fill: #555;");
 
@@ -41,7 +46,7 @@ public class ImportView {
         dropZone.setStyle("-fx-border-color: #999; -fx-border-width: 2; -fx-background-color: #EEE;");
         dropZone.setPadding(new Insets(20));
 
-        // DRAG OVER = autoriser si fichier .txt
+        // fichier autoriser dans la zone de drag & drop
         dropZone.setOnDragOver(event -> {
             if (event.getGestureSource() != dropZone &&
                 event.getDragboard().hasFiles() &&
@@ -53,12 +58,11 @@ public class ImportView {
             event.consume();
         });
 
-        // DRAG EXIT
         dropZone.setOnDragExited(event -> {
             dropZone.setStyle("-fx-border-color: #999; -fx-background-color: #EEE;");
         });
 
-        // DROP
+
         dropZone.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -78,7 +82,7 @@ public class ImportView {
             event.consume();
         });
 
-        // --- BOUTON CHOIX FICHIER ---
+        // bouton choix du fichier
         Button chooseBtn = new Button("Choisir un fichier");
 
         chooseBtn.setOnAction(e -> {
@@ -95,28 +99,27 @@ public class ImportView {
             }
         });
 
-        // --- BOUTON SUIVANT ---
+        // bouton suivant pour passer a la scene suivante 
         Button nextBtn = new Button("Suivant");
 
         nextBtn.setOnAction(e -> {
             if (loadedFile != null) {
-                app.showDisplayView(loadedFile); // ⬅ fichier bien transmis
+                app.showDisplayView(loadedFile);
             } else {
                 fileLabel.setText("Veuillez sélectionner un fichier d'abord !");
             }
         });
 
-        // --- ROOT ---
         root.setAlignment(Pos.CENTER);
         root.getChildren().addAll(dropZone, fileInfo, chooseBtn, nextBtn);
     }
 
-    // --- Méthode pour afficher le fichier sélectionné et stocker loadedFile ---
+    // Méthode pour afficher le fichier sélectionné et stocker loadedFile
     private void setFileLoaded(File file, Label label, ImageView icon) {
         loadedFile = file;
         label.setText("Fichier chargé : " + file.getName());
 
-        // Icône (assure-toi d’avoir /assets/file.png)
+        // Icône
         icon.setImage(new Image(getClass().getResourceAsStream("/assets/file.png")));
 
         System.out.println("Fichier importé : " + file.getAbsolutePath());

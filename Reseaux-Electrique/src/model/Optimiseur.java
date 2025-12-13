@@ -9,6 +9,9 @@ public class Optimiseur {
      * Algorithme de Recuit Simulé prenant en compte lambda.
      * @param rxe Le réseau
      * @param lambda La sévérité de la pénalisation
+     * 
+     * @return instance de CoutRxElect
+     * @author Anis Hammouche
      */
     public static CoutRxElct resolutionAutomatique(ReseauElectrique rxe, double lambda) {
         if (rxe.getConnexions().isEmpty() || rxe.getGens().isEmpty()) return null;

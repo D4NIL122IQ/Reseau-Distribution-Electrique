@@ -1,9 +1,12 @@
 package model;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
-// StringBuffer est dans java.lang, pas besoin d'import explicite, mais c'est bien de le savoir.
 
+/* 
+ * Classe qui represente un reseau electrique 
+ */
 public class ReseauElectrique {
 	// Renommés pour correspondre aux getters (getMaisons, getGens, getConnexions)
 	private ArrayList<Maison> maisons;

@@ -1,6 +1,10 @@
 package model;
 
-
+/*
+ * Classe qui caracterise une maison 
+ * 
+ * @author Danil Guidjou	
+ */
 public class Maison {
 	private String nomM;
 	private Consomation conso;
