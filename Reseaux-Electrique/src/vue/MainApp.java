@@ -6,6 +6,11 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+/*
+ * Stage pricipale de l'interface graphe 
+ * 
+ * @author Danil Guidjou
+ */
 public class MainApp extends Application {
 
     private Stage stage;
@@ -31,7 +36,10 @@ public class MainApp extends Application {
         ImportView view = new ImportView(this);
         stage.setScene(new Scene(view.getView(), 900, 650));
     }
-
+    
+    /*
+     * Permet de charger une scene ou on peut afficher toute les infos du reseau importer
+     */
     public void showDisplayView(File f ) {
         DisplayView view = new DisplayView(this, f);
         stage.setScene(new Scene(view.getView(), 1000, 650));

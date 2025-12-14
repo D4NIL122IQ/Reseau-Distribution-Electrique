@@ -1,6 +1,8 @@
 package vue;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -19,6 +21,7 @@ import java.util.Map;
 import java.lang.StringBuffer;
 
 import model.*;
+import exceptions.*;
 import fileOperation.ParserFile;
 
 
@@ -146,9 +149,18 @@ public class DisplayView {
             root.setCenter(scrollPane);
             root.setBottom(bottomContainer); 
 
-        } catch (Exception e) {
-            System.out.println("Erreur DisplayView : " + e.getMessage());
-            e.printStackTrace();
+        } catch(Exception e) {
+        	TextArea textArea = new TextArea(e.getMessage());
+        	textArea.setEditable(false);
+        	textArea.setWrapText(true);
+
+        	Alert alert = new Alert(Alert.AlertType.ERROR);
+        	alert.setTitle("Erreur");
+        	alert.setHeaderText("Erreurs détectés");
+        	alert.getDialogPane().setContent(textArea);
+        	alert.showAndWait();
+        	Platform.runLater(() -> app.showImportView());  // on retourne a l'aceuille
+ 
         }
     }
 

@@ -79,7 +79,10 @@ public class ParserFile {
 				}
 			}
 		}
-
+		
+		if(rxe.validerReseau() != null) {
+			throw new RxNonValideException(rxe.validerReseau());
+		}
 		return rxe;
 	}
 

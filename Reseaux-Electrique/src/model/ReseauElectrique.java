@@ -220,42 +220,48 @@ public class ReseauElectrique {
 	 * connexion ou avec des connexions multiples sont signalées comme des erreurs
 	 * sur la sortie d'erreur standard.
 	 *
-	 * @return true si le réseau est conforme (chaque maison a 1 connexion), false
+	 * @return null si le réseau est conforme (chaque maison a 1 connexion), String
 	 *         sinon.
 	 */
-	public boolean validerReseau() {
-		ArrayList<String> problemes = new ArrayList<>();
-		if (maisons.isEmpty()) {
-			System.out.println("  -> Reseau vide, validation necessaire.");
-			problemes.add("Liste connexion vide");
-			return false; // Un réseau vide est "conforme"
-		}
+	public String validerReseau() {
+	    StringBuffer problemes = new StringBuffer();
 
-		for (Maison m : maisons) {
-			int count = 0;
-			for (Connexion c : connexions) {
-				if (c.getMs().equals(m)) {
-					count++;
-				}
-			}
-			// Si une maison n'a pas 1 connexion (0 ou 2+)
-			if (count != 1) {
-				String typePb = (count == 0) ? "pas de connexion" : "trop de connexions (" + count + ")";
-				problemes.add(m.getNomM() + " (probleme: " + typePb + ")");
-			}
-		}
+	    if (maisons.isEmpty()) {
+	        System.out.println("  -> Reseau vide, validation necessaire.");
+	        problemes.append("Liste connexion vide\n");
+	        return null;
+	    }
 
-		if (problemes.isEmpty()) {
-			return true;
-		} else {
-			System.err.println("  -> ERREUR: Reseau non conforme.");
-			System.err.println("    Le nom des maisons pour lesquelles il y a un probleme :");
-			for (String p : problemes) {
-				System.err.println("    - " + p);
-			}
-			return false;
-		}
+	    for (Maison m : maisons) {
+	        int count = 0;
+	        for (Connexion c : connexions) {
+	            if (c.getMs().equals(m)) {
+	                count++;
+	            }
+	        }
+
+	        // Si une maison n'a pas exactement 1 connexion
+	        if (count != 1) {
+	            String typePb = (count == 0)
+	                    ? "pas de connexion"
+	                    : "trop de connexions (" + count + ")";
+
+	            problemes
+	                .append(m.getNomM())
+	                .append(" (probleme: ")
+	                .append(typePb)
+	                .append(")\n");
+	        }
+	    }
+
+	    // Si aucun problème → réseau conforme
+	    if (problemes.length() == 0) {
+	        return null;
+	    }
+
+	    return problemes.toString();
 	}
+
 
 	public String afficherConnexion() {
 		StringBuffer t = new StringBuffer("\n--- ETAT ACTUEL DU RESEAU ---\n");
