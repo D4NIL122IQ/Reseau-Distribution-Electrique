@@ -47,7 +47,19 @@ PROJET PAA - RÉSEAU DE DISTRIBUTION D’ÉLECTRICITÉ
            affichage du coût en temps réel, réglage de la sévérité et contrôle de l'optimisation.
 
 • Tests :
-    //TODO ANIS 
+    La fiabilité du projet a été assurée par une batterie de tests rigoureux :
+        1. Tests Unitaires (JUnit 5) :
+           - Validation du modèle (Generateur, Maison, ReseauElectrique) pour garantir que les
+             mises à jour de charge sont correctes lors des ajouts/suppressions.
+           - Test du calculateur de coût pour vérifier le respect de la formule mathématique.
+           - Test du Parser pour s'assurer que les exceptions (FiniPointException, OrdreInstanceException)
+             sont levées au bon moment.
+        2. Tests Fonctionnels :
+           - Vérification de la convergence de l'algorithme d'optimisation sur des fichiers
+             de test complexes.
+           - Test d'intégrité de l'interface graphique (Drag & Drop, réactivité des boutons).
+        3. Tests de Robustesse :
+           - Simulation de fichiers corrompus ou mal formatés pour vérifier la stabilité du programme.
 
 • Exécution du programme :
 
@@ -60,6 +72,10 @@ PROJET PAA - RÉSEAU DE DISTRIBUTION D’ÉLECTRICITÉ
             $ ./runMacOS.sh          # exécuter le script
 
     2. Sur une machine windows :
-        //TODO ANIS
+        - Tout d’abord, il faut télécharger la version 21 du SDK JavaFX (version Windows x64).
+                - Copier le chemin absolu vers le dossier bin du SDK et le placer dans la variable PATH_TO_FX du fichier runWindows.bat.
+                - Ouvrir une invite de commande (CMD) ou un PowerShell et se situer à la racine du projet.
+                - Lancer la commande suivante :
+                    > .\runWindows.bat       # exécuter le script de lancement
 -------------------------------------------------
 © 2025 - Projet PAA - Anis Hammouche & Danil Guidjou
