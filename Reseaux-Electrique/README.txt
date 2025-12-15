@@ -46,5 +46,20 @@ PROJET PAA - RÉSEAU DE DISTRIBUTION D’ÉLECTRICITÉ
         2. Vue de visualisation : Représentation graphique dynamique du réseau (nœuds et liens),
            affichage du coût en temps réel, réglage de la sévérité et contrôle de l'optimisation.
 
+• Tests :
+    //TODO ANIS 
+
+• Exécution du programme :
+
+    1. Sur une machine macOS :
+        - Tout d’abord, il faut télécharger la version 21 du JDK JavaFX (x64 pour les machines Intel ou aarch64 pour les machines Apple Silicon).
+        - Copier le chemin absolu vers le dossier bin du JDK et le placer dans la variable PATH_TO_FX du fichier runMacOS.sh.
+        - Ouvrir un terminal et se situer à la racine du projet.
+        - Lancer les commandes suivantes :
+            $ chmod +x runMacOS.sh   # pour ajouter la permission d’exécuter le script
+            $ ./runMacOS.sh          # exécuter le script
+
+    2. Sur une machine windows :
+        //TODO ANIS
 -------------------------------------------------
 © 2025 - Projet PAA - Anis Hammouche & Danil Guidjou
