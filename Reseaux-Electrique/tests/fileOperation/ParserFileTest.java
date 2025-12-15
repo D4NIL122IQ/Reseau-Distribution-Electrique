@@ -9,9 +9,21 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+/**
+ * Classe de test unitaire pour le parseur de fichiers de configuration du réseau.
+ * Vérifie la robustesse de la lecture des fichiers, le respect de la syntaxe
+ * et la validation des contraintes d'ordre des instances.
+ * * @author Anis Hammouche
+ */
 class ParserFileTest {
 
-    // Méthode utilitaire pour créer un fichier temporaire pour le test
+    /**
+     * Méthode utilitaire pour générer dynamiquement un fichier texte de test.
+     * * @param nom Le nom du fichier à créer
+     * @param contenu Le texte à écrire à l'intérieur
+     * @return Le chemin absolu du fichier créé
+     * @throws IOException Si une erreur d'écriture survient
+     */
     private String creerFichierTest(String nom, String contenu) throws IOException {
         File f = new File(nom);
         FileWriter fw = new FileWriter(f);
@@ -20,24 +32,30 @@ class ParserFileTest {
         return f.getAbsolutePath();
     }
 
+    /**
+     * Vérifie que le système réagit correctement lorsqu'un chemin de fichier invalide est fourni.
+     * Le parseur doit propager une FileNotFoundException.
+     */
     @Test
     void testFichierIntrouvable() {
-        // Vérifie que le parser laisse bien remonter l'exception si le fichier n'existe pas
         assertThrows(FileNotFoundException.class, () -> {
             ParserFile.parser("fichier_qui_n_existe_pas_12345.txt");
         });
     }
 
+    /**
+     * Teste la validation syntaxique stricte (présence du point final en fin de ligne).
+     * Si une instruction ne se termine pas par un point, une exception FiniPointException est attendue.
+     * * @throws IOException En cas de problème de création du fichier temporaire
+     */
     @Test
     void testErreurSyntaxePoint() throws IOException {
-        // Fichier sans le point final à la ligne 2
         String path = creerFichierTest("test_syntaxe.txt",
                 "generateur(G1, 100).\n" +
-                        "generateur(G2, 100)\n" + // Pas de point ici !
+                        "generateur(G2, 100)\n" + // Erreur : Point manquant ici
                         "maison(M1, NORMAL)."
         );
 
-        // On s'attend à une exception FiniPointException
         assertThrows(FiniPointException.class, () -> {
             ParserFile.parser(path);
         }, "Le parser devrait lever une exception si un point manque en fin de ligne");
@@ -45,20 +63,24 @@ class ParserFileTest {
         new File(path).delete(); // Nettoyage du fichier temporaire
     }
 
+    /**
+     * Vérifie que l'ordre logique de déclaration des instances est respecté.
+     * Le format impose : Générateurs -> Maisons -> Connexions.
+     * Toute connexion déclarée avant ses composants doit lever une OrdreInstanceException.
+     * * @throws IOException En cas de problème de création du fichier temporaire
+     */
     @Test
     void testErreurOrdre() throws IOException {
-        // Connexion définie avant la Maison -> Interdit selon le sujet
         String path = creerFichierTest("test_ordre.txt",
                 "generateur(G1, 100).\n" +
-                        "connexion(G1, M1).\n" + // ERREUR : Connexion trop tôt !
+                        "connexion(G1, M1).\n" + // Erreur : La maison M1 n'a pas encore été déclarée
                         "maison(M1, NORMAL)."
         );
 
-        // On s'attend à OrdreInstanceException (et non MGException)
         assertThrows(OrdreInstanceException.class, () -> {
             ParserFile.parser(path);
         }, "Le parser devrait lever une exception si l'ordre (Generateur -> Maison -> Connexion) n'est pas respecté");
 
-        new File(path).delete(); // Nettoyage
+        new File(path).delete(); // Nettoyage du fichier temporaire
     }
 }
