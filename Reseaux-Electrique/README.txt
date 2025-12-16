@@ -42,9 +42,12 @@ PROJET PAA - RÉSEAU DE DISTRIBUTION D’ÉLECTRICITÉ
     - Algorithme d'optimisation : Implémentation du recuit simulé pour équilibrer la charge
       et supprimer les surcharges.
     - Interface graphique : Réalisée avec JavaFX, comprenant deux vues :
-        1. Vue d'accueil : Zone de Drag & Drop et sélecteur de fichiers pour l'importation.
-        2. Vue de visualisation : Représentation graphique dynamique du réseau (nœuds et liens),
+        1. Vue Menu : choisir si on veut crée un reseau de distribution d'éléctricité manuellement 
+          ou importer un fichier directement
+        2. Vue d'import : Zone de Drag & Drop et sélecteur de fichiers pour l'importation.
+        3. Vue de visualisation : Représentation graphique dynamique du réseau (nœuds et liens),
            affichage du coût en temps réel, réglage de la sévérité et contrôle de l'optimisation.
+        4. Vue création : pour crée une instance de ReseauElectrique et pouvoir la manipuler graphiquement=
 
 • Tests :
     La fiabilité du projet a été assurée par une batterie de tests rigoureux :

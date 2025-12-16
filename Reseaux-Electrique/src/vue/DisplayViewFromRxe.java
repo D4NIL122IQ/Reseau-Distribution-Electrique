@@ -20,21 +20,21 @@ import java.util.Map;
 import java.lang.StringBuffer;
 
 import model.*;
-import exceptions.*;
-// Pas besoin de ParserFile ici car on a déjà l'objet
+
 
 /*
  * Vue qui affiche graphiquement un reseau créé manuellement
  * Affiche le coût du reseau
  * Permet de lancer une optimisation
  * Exporter le reseau optimisé
+ * 
+ * @author Danil Guidjou
  */
 public class DisplayViewFromRxe {
 
     private BorderPane root = new BorderPane();
     private Pane graphPane = new Pane();
-    
-    // Le label d'information global
+
     private Label statusLabel = new Label();
     
     // Champ pour sélectionner la sévérité
@@ -93,7 +93,6 @@ public class DisplayViewFromRxe {
 
             Button exportBtn = new Button("Exporter");
             // On peut activer l'export dès le début si le réseau manuel est valide, 
-            // ou le laisser désactivé jusqu'à l'optimisation. Ici, je laisse comme avant.
             exportBtn.setDisable(true); 
 
             exportBtn.setOnAction(e -> {
@@ -210,13 +209,11 @@ public class DisplayViewFromRxe {
 
         // Ajustement taille ScrollPane
         int maxItems = Math.max(indexMaison, indexGen);
-        // On s'assure d'une largeur minimale pour que ce soit joli même avec peu d'éléments
         double width = Math.max(800, (maxItems * ESPACE_X) + (MARGE_X * 2));
         graphPane.setPrefWidth(width);
         graphPane.setPrefHeight(600);
     }
 
-    // Méthode modifiée : plus de paramètre File f
     private void updateStatusLabel() {
         StringBuffer texte = new StringBuffer("Source : Création Manuelle\n");
         texte.append("Coût du réseau : " + new CoutRxElct(rxe).calculeCoutRxE());
@@ -235,10 +232,10 @@ public class DisplayViewFromRxe {
         img.setFitWidth(60);
         img.setFitHeight(60);
         Label label = new Label(labelName);
-        label.setStyle("-fx-font-weight: bold; -fx-text-alignment: center;"); // Ajout alignement
+        label.setStyle("-fx-font-weight: bold; -fx-text-alignment: center;"); 
         VBox box = new VBox(5, img, label);
         box.setAlignment(Pos.CENTER);
-        box.setPrefWidth(100); // Légèrement élargi pour les longs textes
+        box.setPrefWidth(100); 
         return box;
     }
 
