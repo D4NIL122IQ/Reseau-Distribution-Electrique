@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import model.ReseauElectrique;
 import java.io.File;
 
 /*
@@ -19,11 +20,11 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
             
-        showImportView();
+        showMenu();
 
         stage.setTitle("Reseau de destribution electrique");
 
-        stage.setResizable(false);  // ← bloque la possibilité de redimensionner
+        stage.setResizable(false);  // bloque la possibilité de redimensionner
 
         stage.show();
     }
@@ -41,8 +42,29 @@ public class MainApp extends Application {
      * Permet de charger une scene ou on peut afficher toute les infos du reseau importer
      */
     public void showDisplayView(File f ) {
-        DisplayView view = new DisplayView(this, f);
-        stage.setScene(new Scene(view.getView(), 1000, 650));
+        DisplayViewFromFile view = new DisplayViewFromFile(this, f);
+        stage.setScene(new Scene(view.getView(), 900, 650));
+    }
+    
+    public void showDisplayView(ReseauElectrique rxe ) {
+    	DisplayViewFromRxe view = new DisplayViewFromRxe(this, rxe);
+        stage.setScene(new Scene(view.getView(), 900, 650));
+    }
+    
+    /*
+     * Permet de lancer le menu
+     */
+    public void showMenu() {
+    	Menu view = new Menu(this);
+    	stage.setScene(new Scene(view.getView(), 900, 650));
+    }
+    
+    /*
+     * Permet de charger une scene ou on peut cree un reseau 
+     */
+    public void showCreatR() {
+    	CreatReseau view = new CreatReseau(this);
+    	stage.setScene(new Scene(view.getView(), 900, 650));
     }
 
     public static void main(String[] args) {

@@ -17,23 +17,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import java.lang.StringBuffer;
 
 import model.*;
 import exceptions.*;
-import fileOperation.ParserFile;
-
+// Pas besoin de ParserFile ici car on a déjà l'objet
 
 /*
- * vue qui affiche graphiquement le reseau importer
- * affiche le cout du reseau importer 
- * permet de lancer une optimisation du reseau 
- * exporter le reseau optimiser dans un fichier txt
- * 
- * @author Danil Guidjou
+ * Vue qui affiche graphiquement un reseau créé manuellement
+ * Affiche le coût du reseau
+ * Permet de lancer une optimisation
+ * Exporter le reseau optimisé
  */
-public class DisplayView {
+public class DisplayViewFromRxe {
 
     private BorderPane root = new BorderPane();
     private Pane graphPane = new Pane();
@@ -41,7 +37,7 @@ public class DisplayView {
     // Le label d'information global
     private Label statusLabel = new Label();
     
-    // champ pour selectionne la severite
+    // Champ pour sélectionner la sévérité
     private TextArea severityInput = new TextArea("10"); 
     
     private MainApp app;
@@ -52,32 +48,32 @@ public class DisplayView {
     private final double Y_GEN = 50;
     private final double Y_MAISON = 400;
 
-    public DisplayView(MainApp app, File f) {
+    /**
+     * Constructeur prenant une instance de ReseauElectrique directement
+     */
+    public DisplayViewFromRxe(MainApp app, ReseauElectrique reseauInput) {
         this.app = app;
+        this.rxe = reseauInput; // On récupère l'instance passée en paramètre
 
         try {
-            rxe = ParserFile.parser(f.getAbsolutePath());
-
-            // un panel scroll qui contiendra le reseau
+            // Un panel scroll qui contiendra le réseau
             ScrollPane scrollPane = new ScrollPane(graphPane);
             scrollPane.setPannable(true);
             scrollPane.setFitToHeight(true);
 
-            
             VBox bottomContainer = new VBox(10); 
             bottomContainer.setAlignment(Pos.CENTER);
             bottomContainer.setPadding(new javafx.geometry.Insets(15));
             bottomContainer.setStyle("-fx-background-color: #f0f0f0; -fx-border-color: #ccc; -fx-border-width: 1 0 0 0;");
 
-
-            Label lblSeverite = new Label("Severité :");
+            Label lblSeverite = new Label("Sévérité :");
             lblSeverite.setStyle("-fx-font-weight: bold;");
 
-            severityInput.setPrefRowCount(1);     
+            severityInput.setPrefRowCount(1);      
             severityInput.setPrefColumnCount(3); 
-            severityInput.setMaxHeight(30);       
+            severityInput.setMaxHeight(30);        
             
-        
+            // Validation pour n'accepter que des chiffres
             severityInput.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (!newValue.matches("\\d*")) {
                     severityInput.setText(newValue.replaceAll("[^\\d]", ""));
@@ -91,16 +87,18 @@ public class DisplayView {
             
             infoBar.getChildren().addAll(lblSeverite, severityInput, new Label("   |   "), statusLabel);
 
-            // boutons
+            // Boutons
             HBox buttonBar = new HBox(15);
             buttonBar.setAlignment(Pos.CENTER);
 
             Button exportBtn = new Button("Exporter");
-            exportBtn.setDisable(true);
+            // On peut activer l'export dès le début si le réseau manuel est valide, 
+            // ou le laisser désactivé jusqu'à l'optimisation. Ici, je laisse comme avant.
+            exportBtn.setDisable(true); 
 
             exportBtn.setOnAction(e -> {
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Sauvegarder le réseau optimisé");
+                fileChooser.setTitle("Sauvegarder le réseau");
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichier Texte", "*.txt"));
                 File dest = fileChooser.showSaveDialog(root.getScene().getWindow());
 
@@ -126,45 +124,47 @@ public class DisplayView {
                             severite = 10; 
                         }
                     }
+                    
+                    // Appel à l'optimiseur
                     rxe = Optimiseur.resolutionAutomatique(rxe, severite).getRxe();
 
-                    dessinerReseau(f); 
+                    dessinerReseau(); // Redessiner sans paramètre Fichier
 
                     exportBtn.setDisable(false);
                 } catch (Exception ex) {
                     System.err.println("Erreur optimisation : " + ex.getMessage());
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur Optimisation");
+                    alert.setContentText(ex.getMessage());
+                    alert.showAndWait();
                 }
             });
 
-            Button rtrnLobby = new Button("Choisir un autre fichier");
-            rtrnLobby.setOnAction(e -> app.showImportView()); 
+            Button rtrnMenu = new Button("Retour au Menu");
+            // On suppose que MainApp a une méthode showMenu(), sinon mettre showImportView()
+            rtrnMenu.setOnAction(e -> app.showMenu()); 
             
-            buttonBar.getChildren().addAll(rtrnLobby, optimizeBtn, exportBtn);
+            buttonBar.getChildren().addAll(rtrnMenu, optimizeBtn, exportBtn);
          
             bottomContainer.getChildren().addAll(infoBar, buttonBar); 
 
-
-            dessinerReseau(f);
+            dessinerReseau(); // Appel sans fichier
 
             root.setCenter(scrollPane);
             root.setBottom(bottomContainer); 
 
         } catch(Exception e) {
-        	TextArea textArea = new TextArea(e.getMessage());
-        	textArea.setEditable(false);
-        	textArea.setWrapText(true);
-
-        	Alert alert = new Alert(Alert.AlertType.ERROR);
-        	alert.setTitle("Erreur");
-        	alert.setHeaderText("Erreurs détectés");
-        	alert.getDialogPane().setContent(textArea);
-        	alert.showAndWait();
-        	Platform.runLater(() -> app.showImportView());  // on retourne a l'aceuille
- 
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Erreur d'affichage");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
 
-    private void dessinerReseau(File f) {
+    // Méthode modifiée : plus de paramètre File f
+    private void dessinerReseau() {
         graphPane.getChildren().clear();
 
         Map<Maison, VBox> nodeMaison = new HashMap<>();
@@ -206,17 +206,20 @@ public class DisplayView {
         }
 
         // Mise à jour du Label d'information
-        updateStatusLabel(f);
+        updateStatusLabel();
 
         // Ajustement taille ScrollPane
         int maxItems = Math.max(indexMaison, indexGen);
-        graphPane.setPrefWidth((maxItems * ESPACE_X) + (MARGE_X * 2));
+        // On s'assure d'une largeur minimale pour que ce soit joli même avec peu d'éléments
+        double width = Math.max(800, (maxItems * ESPACE_X) + (MARGE_X * 2));
+        graphPane.setPrefWidth(width);
         graphPane.setPrefHeight(600);
     }
 
-    private void updateStatusLabel(File f) {
-        StringBuffer texte = new StringBuffer("Fichier : " + f.getName() + "\n");
-        texte.append("Cout du reseau : " + new CoutRxElct(rxe).calculeCoutRxE());
+    // Méthode modifiée : plus de paramètre File f
+    private void updateStatusLabel() {
+        StringBuffer texte = new StringBuffer("Source : Création Manuelle\n");
+        texte.append("Coût du réseau : " + new CoutRxElct(rxe).calculeCoutRxE());
 
         statusLabel.setText(texte.toString());
     }
@@ -232,10 +235,10 @@ public class DisplayView {
         img.setFitWidth(60);
         img.setFitHeight(60);
         Label label = new Label(labelName);
-        label.setStyle("-fx-font-weight: bold;");
+        label.setStyle("-fx-font-weight: bold; -fx-text-alignment: center;"); // Ajout alignement
         VBox box = new VBox(5, img, label);
         box.setAlignment(Pos.CENTER);
-        box.setPrefWidth(90);
+        box.setPrefWidth(100); // Légèrement élargi pour les longs textes
         return box;
     }
 

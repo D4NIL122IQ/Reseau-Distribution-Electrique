@@ -19,113 +19,113 @@ import java.io.File;
  */
 public class ImportView {
 
-    private VBox root = new VBox(20);
-    private MainApp app;
+	private VBox root = new VBox(20);
+	private MainApp app;
 
-    private File loadedFile = null;
+	private File loadedFile = null;
 
-    public ImportView(MainApp app) {
-        this.app = app;
-        
-        // setup icon fichier
-        ImageView fileIcon = new ImageView();
-        fileIcon.setFitWidth(40);
-        fileIcon.setFitHeight(40);
+	public ImportView(MainApp app) {
+		this.app = app;
 
-        Label fileLabel = new Label("Aucun fichier sélectionné");
+		// setup icon fichier
+		ImageView fileIcon = new ImageView();
+		fileIcon.setFitWidth(40);
+		fileIcon.setFitHeight(40);
 
-        HBox fileInfo = new HBox(10, fileIcon, fileLabel);
-        fileInfo.setAlignment(Pos.CENTER);
+		Label fileLabel = new Label("Aucun fichier sélectionné");
 
-        // zone drag & drop
-        Label dragLabel = new Label("Déposez un fichier .txt ici");
-        dragLabel.setStyle("-fx-font-size: 16; -fx-text-fill: #555;");
+		HBox fileInfo = new HBox(10, fileIcon, fileLabel);
+		fileInfo.setAlignment(Pos.CENTER);
 
-        StackPane dropZone = new StackPane(dragLabel);
-        dropZone.setPrefSize(350, 150);
-        dropZone.setStyle("-fx-border-color: #999; -fx-border-width: 2; -fx-background-color: #EEE;");
-        dropZone.setPadding(new Insets(20));
+		// zone drag & drop
+		Label dragLabel = new Label("Déposez un fichier .txt ici");
+		dragLabel.setStyle("-fx-font-size: 16; -fx-text-fill: #555;");
 
-        // fichier autoriser dans la zone de drag & drop
-        dropZone.setOnDragOver(event -> {
-            if (event.getGestureSource() != dropZone &&
-                event.getDragboard().hasFiles() &&
-                event.getDragboard().getFiles().get(0).getName().toLowerCase().endsWith(".txt")) {
+		StackPane dropZone = new StackPane(dragLabel);
+		dropZone.setPrefSize(350, 150);
+		dropZone.setStyle("-fx-border-color: #999; -fx-border-width: 2; -fx-background-color: #EEE;");
+		dropZone.setPadding(new Insets(20));
 
-                event.acceptTransferModes(TransferMode.COPY);
-                dropZone.setStyle("-fx-border-color: #3A6EA5; -fx-background-color: #DDEEFF;");
-            }
-            event.consume();
-        });
+		// fichier autoriser dans la zone de drag & drop
+		dropZone.setOnDragOver(event -> {
+			if (event.getGestureSource() != dropZone && event.getDragboard().hasFiles()
+					&& event.getDragboard().getFiles().get(0).getName().toLowerCase().endsWith(".txt")) {
 
-        dropZone.setOnDragExited(event -> {
-            dropZone.setStyle("-fx-border-color: #999; -fx-background-color: #EEE;");
-        });
+				event.acceptTransferModes(TransferMode.COPY);
+				dropZone.setStyle("-fx-border-color: #3A6EA5; -fx-background-color: #DDEEFF;");
+			}
+			event.consume();
+		});
 
+		dropZone.setOnDragExited(event -> {
+			dropZone.setStyle("-fx-border-color: #999; -fx-background-color: #EEE;");
+		});
 
-        dropZone.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
+		dropZone.setOnDragDropped(event -> {
+			Dragboard db = event.getDragboard();
+			boolean success = false;
 
-            if (db.hasFiles()) {
-                File file = db.getFiles().get(0);
+			if (db.hasFiles()) {
+				File file = db.getFiles().get(0);
 
-                if (file.getName().toLowerCase().endsWith(".txt")) {
-                    setFileLoaded(file, fileLabel, fileIcon);
-                    success = true;
-                } else {
-                    fileLabel.setText("Erreur : uniquement les fichiers .txt sont acceptés !");
-                }
-            }
+				if (file.getName().toLowerCase().endsWith(".txt")) {
+					setFileLoaded(file, fileLabel, fileIcon);
+					success = true;
+				} else {
+					fileLabel.setText("Erreur : uniquement les fichiers .txt sont acceptés !");
+				}
+			}
 
-            event.setDropCompleted(success);
-            event.consume();
-        });
+			event.setDropCompleted(success);
+			event.consume();
+		});
 
-        // bouton choix du fichier
-        Button chooseBtn = new Button("Choisir un fichier");
+		// bouton choix du fichier
+		Button chooseBtn = new Button("Choisir un fichier");
 
-        chooseBtn.setOnAction(e -> {
-            FileChooser chooser = new FileChooser();
-            chooser.setTitle("Choisir un fichier texte");
+		chooseBtn.setOnAction(e -> {
+			FileChooser chooser = new FileChooser();
+			chooser.setTitle("Choisir un fichier texte");
 
-            chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Fichiers texte (*.txt)", "*.txt")
-            );
+			chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers texte (*.txt)", "*.txt"));
 
-            File file = chooser.showOpenDialog(null);
-            if (file != null) {
-                setFileLoaded(file, fileLabel, fileIcon);
-            }
-        });
+			File file = chooser.showOpenDialog(null);
+			if (file != null) {
+				setFileLoaded(file, fileLabel, fileIcon);
+			}
+		});
 
-        // bouton suivant pour passer a la scene suivante 
-        Button nextBtn = new Button("Suivant");
+		// bouton suivant pour passer a la scene suivante
+		Button nextBtn = new Button("Suivant");
 
-        nextBtn.setOnAction(e -> {
-            if (loadedFile != null) {
-                app.showDisplayView(loadedFile);
-            } else {
-                fileLabel.setText("Veuillez sélectionner un fichier d'abord !");
-            }
-        });
+		nextBtn.setOnAction(e -> {
+			if (loadedFile != null) {
+				app.showDisplayView(loadedFile);
+			} else {
+				fileLabel.setText("Veuillez sélectionner un fichier d'abord !");
+			}
+		});
 
-        root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(dropZone, fileInfo, chooseBtn, nextBtn);
-    }
+		// bouton pour retourner au menu
+		Button menuBtn = new Button("Retour au menu");
+		menuBtn.setOnAction(e -> app.showMenu());
+		
+		root.setAlignment(Pos.CENTER);
+		root.getChildren().addAll(dropZone, fileInfo, chooseBtn, nextBtn, menuBtn);
+	}
 
-    // Méthode pour afficher le fichier sélectionné et stocker loadedFile
-    private void setFileLoaded(File file, Label label, ImageView icon) {
-        loadedFile = file;
-        label.setText("Fichier chargé : " + file.getName());
+	// Méthode pour afficher le fichier sélectionné et stocker loadedFile
+	private void setFileLoaded(File file, Label label, ImageView icon) {
+		loadedFile = file;
+		label.setText("Fichier chargé : " + file.getName());
 
-        // Icône
-        icon.setImage(new Image(getClass().getResourceAsStream("/assets/file.png")));
+		// Icône
+		icon.setImage(new Image(getClass().getResourceAsStream("/assets/file.png")));
 
-        System.out.println("Fichier importé : " + file.getAbsolutePath());
-    }
+		System.out.println("Fichier importé : " + file.getAbsolutePath());
+	}
 
-    public VBox getView() {
-        return root;
-    }
+	public VBox getView() {
+		return root;
+	}
 }
