@@ -2,7 +2,7 @@ package fileOperation;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import fileOperation.ParserFile;
+//suppression de import fileOperation.ParserFile car on y est déjà
 import exceptions.*;
 import java.io.File;
 import java.io.FileWriter;
@@ -83,4 +83,27 @@ class ParserFileTest {
 
         new File(path).delete(); // Nettoyage du fichier temporaire
     }
+    
+    /**
+     * Vérifie qu'une maison ne peut pas être connectée plusieurs fois.
+     * Une MaisonDejaConnecteeException doit être levée si une deuxième
+     * connexion implique la même maison.
+     */
+    @Test
+    void testMaisonDejaConnectee() throws IOException {
+        String path = creerFichierTest("test_maison_deja_connectee.txt",
+                "generateur(G1, 100).\n" +
+                "generateur(G2, 100).\n" +
+                "maison(M1, NORMAL).\n" +
+                "connexion(G1, M1).\n" +
+                "connexion(G2, M1).\n"
+        );
+
+        assertThrows(MaisonDejaConnecteeException.class, () -> {
+            ParserFile.parser(path);
+        });
+
+        new File(path).delete();
+    }
+
 }
