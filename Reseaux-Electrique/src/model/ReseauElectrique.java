@@ -75,12 +75,16 @@ public class ReseauElectrique {
 	}
 
 	/**
-	 * Méthode interne pour trouver la connexion associée à une maison.
+	 * Retourne la connexion associée à une maison donnée.
 	 * 
-	 * @param m La maison à rechercher
-	 * @return La connexion trouvée ou null
+	 * @param m la maison recherchée
+	 * @return la connexion correspondante si elle existe, null sinon
+	 * 
+	 * Cette méthode a été rendue accessible afin de permettre
+	 * au parser de vérifier qu'une maison ne soit connectée
+	 * qu'à un seul générateur.
 	 */
-	private Connexion findConnexion(Maison m) {
+	public Connexion findConnexion(Maison m) {
 		for (Connexion c : connexions) {
 			if (c.getMs().equals(m)) {
 				return c;

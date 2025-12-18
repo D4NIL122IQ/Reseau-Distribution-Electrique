@@ -1,15 +1,11 @@
 package fileOperation;
 
+import exceptions.*;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-
-import exceptions.*; // Vos exceptions personnalisées
 import model.Connexion;
 import model.Consomation;
-import model.Generateur;
+import model.Generateur; // Vos exceptions personnalisées
 import model.Maison;
 import model.ReseauElectrique;
 
@@ -155,8 +151,7 @@ public class ParserFile {
 	}
 
 	private static Connexion parserCo(String ligne, ReseauElectrique rxe, int n)
-			throws MGException, NormbreParametreExeception {
-		/*
+        throws MGException, NormbreParametreExeception, MaisonDejaConnecteeException {	/*
 		 * Methode static priver utiliser par le parser une instance de connexion
 		 * 
 		 * @param ligne : la ligne du fichier qui a pour prefixe 'connexion'
@@ -195,9 +190,17 @@ public class ParserFile {
 				throw new MGException(
 						"Ligne " + n + ": Impossible de creer une connexion, Maison ou Generateur inconnu (" + arg1
 								+ ", " + arg2 + ")");
+			} 
+			
+			// Vérification de la contrainte d'unicité :
+			// une maison ne peut avoir qu'une seule connexion
+			if (rxe.findConnexion(m) != null) {
+    			throw new MaisonDejaConnecteeException(
+        			"Maison " + m.getNomM() + " déjà connectée"
+    			);
 			}
-
 			return new Connexion(m, g);
+		
 		} catch (IndexOutOfBoundsException e) {
 			throw new NormbreParametreExeception("Ligne " + n + ": Format connexion incorrect.");
 		}
