@@ -4,6 +4,7 @@ PROJET PAA - RÉSEAU DE DISTRIBUTION D’ÉLECTRICITÉ
 • Membres du groupe :
     - Guidjou Danil
     - Hammouche Anis
+    - Lamouchi Mounir 
 
 • Présentation de l'algorithme de résolution automatique :
     L'algorithme implémenté pour la résolution automatique est basé sur la métaheuristique du
@@ -80,5 +81,17 @@ PROJET PAA - RÉSEAU DE DISTRIBUTION D’ÉLECTRICITÉ
                 - Ouvrir une invite de commande (CMD) ou un PowerShell et se situer à la racine du projet.
                 - Lancer la commande suivante :
                     > .\runWindows.bat       # exécuter le script de lancement
+    
+    3. Sur une machine Linux :
+        - Tout d’abord, il faut télécharger la version 21 du SDK JavaFX pour Linux (x64).
+          (Attention : JavaFX n’est pas inclus par défaut dans le JDK standard)
+        - Copier le chemin absolu vers le dossier lib du SDK JavaFX.
+        - Ouvrir un terminal et se situer à la racine du projet.
+        - Modifier la variable PATH_TO_FX dans le fichier runLinux.sh avec ce chemin.
+        - Ajouter les droits d’exécution au script :
+            $ chmod +x runLinux.sh
+        - Lancer le programme :
+            $ ./runLinux.sh
+    
 -------------------------------------------------
 © 2025 - Projet PAA - Anis Hammouche & Danil Guidjou
