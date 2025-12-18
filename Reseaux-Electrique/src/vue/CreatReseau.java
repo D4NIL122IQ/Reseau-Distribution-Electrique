@@ -59,7 +59,8 @@ public class CreatReseau {
 		Button btnAddCon = new Button("Ajouter Connexion");
 		Button btnDelCon = new Button("Supprimer Connexion");
 		Button btnOpti = new Button("Optimiser le reseau");
-
+		Button btnRtn = new Button("Retour au menu");
+		btnRtn.setOnAction(e -> app.showMenu());
 		btnAddMaison.setOnAction(e -> actionAjouterMaison());
 		btnAddGen.setOnAction(e -> actionAjouterGenerateur());
 		btnAddCon.setOnAction(e -> actionAjouterConnexion());
@@ -74,7 +75,7 @@ public class CreatReseau {
 
 		});
 
-		barreBoutons.getChildren().addAll(btnAddMaison, btnAddGen, btnAddCon, btnDelCon, btnOpti);
+		barreBoutons.getChildren().addAll(btnRtn, btnAddMaison, btnAddGen, btnAddCon, btnDelCon, btnOpti);
 		root.getChildren().addAll(new Label("Création Réseau"), zoneDessin, barreBoutons);
 	}
 	
