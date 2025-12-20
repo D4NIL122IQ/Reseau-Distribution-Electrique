@@ -57,6 +57,9 @@ public class ImportView {
 			event.consume();
 		});
 
+		// bouton suivant pour passer a la scene suivante
+		Button nextBtn = new Button("Suivant");
+
 		dropZone.setOnDragExited(event -> {
 			dropZone.setStyle("-fx-border-color: #999; -fx-background-color: #EEE;");
 		});
@@ -71,6 +74,7 @@ public class ImportView {
 				if (file.getName().toLowerCase().endsWith(".txt")) {
 					setFileLoaded(file, fileLabel, fileIcon);
 					success = true;
+					styleButton(nextBtn, "#66aeeaff");
 				} else {
 					fileLabel.setText("Erreur : uniquement les fichiers .txt sont acceptés !");
 				}
@@ -92,11 +96,10 @@ public class ImportView {
 			File file = chooser.showOpenDialog(null);
 			if (file != null) {
 				setFileLoaded(file, fileLabel, fileIcon);
+				styleButton(nextBtn, "#66aeeaff");
 			}
 		});
 
-		// bouton suivant pour passer a la scene suivante
-		Button nextBtn = new Button("Suivant");
 
 		nextBtn.setOnAction(e -> {
 			if (loadedFile != null) {
@@ -109,7 +112,9 @@ public class ImportView {
 		// bouton pour retourner au menu
 		Button menuBtn = new Button("Retour au menu");
 		menuBtn.setOnAction(e -> app.showMenu());
-		
+		styleButton(menuBtn, "#66aeeaff");
+		styleButton(chooseBtn, "#66aeeaff");
+		styleButton(nextBtn, "#555555ff");
 		root.setAlignment(Pos.CENTER);
 		root.getChildren().addAll(dropZone, fileInfo, chooseBtn, nextBtn, menuBtn);
 	}
@@ -125,6 +130,15 @@ public class ImportView {
 		System.out.println("Fichier importé : " + file.getAbsolutePath());
 	}
 
+	    /**
+     * Méthode utilitaire pour donner une taille et un style aux boutons
+     */
+    private void styleButton(Button btn, String color) {
+        btn.setMinWidth(250);
+        btn.setMinHeight(40);
+        btn.setStyle("-fx-font-size: 14px; -fx-base: " + color + ";");
+    }
+	
 	public VBox getView() {
 		return root;
 	}
